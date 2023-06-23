@@ -55,7 +55,7 @@ ad_proc -public libretranslate::languages {} {
 
     if {[dict get $r status] == 200} {
         package require json
-        return [::json::many-json2dict [dict get $r page]]
+        return [::json::json2dict [dict get $r page]]
     } else {
         #
         # This API should never return an error. When it does, we
