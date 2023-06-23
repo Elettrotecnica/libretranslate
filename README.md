@@ -1,4 +1,5 @@
-# libretranslate
-OpenACS bindings to the LibreTranslate web API.
+# OpenACS LibreTranslate library
 
-See https://libretranslate.com/
+This package implements OpenACS bindings to the LibreTranslate web API.
+
+See https://openacs.org/ and https://libretranslate.com/
