@@ -32,12 +32,18 @@ aa_register_case \
         aa_section libretranslate::detect
 
         set r [::libretranslate::detect -text "The quick brown fox jumps over the lazy dog"]
+        aa_log $r
         aa_equals "Language is detected" en [dict get $r language]
         aa_true "Confidence is a number" [string is double [dict get $r confidence]]
 
 
         aa_section libretranslate::translate
 
+        set r [::libretranslate::translate \
+                   -text "The quick brown fox jumps over the lazy dog" \
+                   -source_lang en \
+                   -target_lang it]
+        aa_log $r
         aa_true "Translation looks sane" {[string first "volpe" $r] > -1}
 
 
@@ -50,18 +56,21 @@ aa_register_case \
         set f [::libretranslate::translate_file -file $tmpnam -source_lang en -target_lang it]
         aa_true "File exists" [file exists $f]
         set rfd [open $f r]; set r [read $rfd]; close $rfd
+        aa_log $r
         aa_true "Translation looks sane" {[string first "volpe" $r] > -1}
 
 
         aa_section libretranslate::suggest
 
-        aa_false "Suggesting works" [catch {
-            ::libretranslate::suggest \
-                -text "Ciao, come ti chiami?" \
-                -translation "Hello, what's your name?" \
-                -source_lang it \
-                -target_lang en
-        }]
+        #
+        # We just make sure this command does not bomb
+        #
+        ::libretranslate::suggest \
+            -text "Ciao, come ti chiami?" \
+            -translation "Hello, what's your name?" \
+            -source_lang it \
+            -target_lang en
+
     }
 
 aa_register_case \

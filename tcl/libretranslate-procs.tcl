@@ -29,11 +29,11 @@ ad_proc -public libretranslate::detect {
                                    api_key $api_key] \
               ]
 
-    package require json
+    catch {package require json} errmsg
 
     if {[dict get $r status] == 200} {
         set content [::json::many-json2dict [dict get $r page]]
-        return [lindex $content 0]
+        return [lindex $content 0 0]
     } else {
         set content [::json::json2dict [dict get $r page]]
         error [list [dict get $r status] [dict get $content error]]
@@ -54,7 +54,7 @@ ad_proc -public libretranslate::languages {} {
     set r [::util::http::get -url ${server_url}/languages]
 
     if {[dict get $r status] == 200} {
-        package require json
+        catch {package require json} errmsg
         return [::json::json2dict [dict get $r page]]
     } else {
         #
@@ -77,7 +77,7 @@ ad_proc -public libretranslate::frontend {} {
     set r [::util::http::get -url ${server_url}/frontend/settings]
 
     if {[dict get $r status] == 200} {
-        package require json
+        catch {package require json} errmsg
         return [::json::json2dict [dict get $r page]]
     } else {
         #
@@ -117,7 +117,7 @@ ad_proc -public libretranslate::translate {
                                    api_key $api_key] \
               ]
 
-    package require json
+    catch {package require json} errmsg
     set content [::json::json2dict [dict get $r page]]
 
     if {[dict get $r status] == 200} {
@@ -147,16 +147,16 @@ ad_proc -public libretranslate::translate_file {
 
     set r [::util::http::post \
                -url ${server_url}/translate_file \
-               -files [list \
-                           file $file \
-                           fieldname file] \
+               -files [list [list \
+                                 file $file \
+                                 fieldname file]] \
                -formvars_list [list \
                                    source $source_lang \
                                    target $target_lang \
                                    api_key $api_key] \
               ]
 
-    package require json
+    catch {package require json} errmsg
     set content [::json::json2dict [dict get $r page]]
 
     if {[dict get $r status] == 200} {
@@ -209,7 +209,7 @@ ad_proc -public libretranslate::suggest {
               ]
 
     if {[dict get $r status] != 200} {
-        package require json
+        catch {package require json} errmsg
         set content [::json::json2dict [dict get $r page]]
         error [list [dict get $r status] [dict get $content error]]
     }
