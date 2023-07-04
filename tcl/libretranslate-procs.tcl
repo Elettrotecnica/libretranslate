@@ -93,6 +93,7 @@ ad_proc -public libretranslate::translate {
     -source_lang:required
     -target_lang:required
     {-format text}
+    {-timeout 120}
 } {
     Translates text from one language to the other.
 
@@ -109,6 +110,7 @@ ad_proc -public libretranslate::translate {
 
     set r [::util::http::post \
                -url ${server_url}/translate \
+               -timeout $timeout \
                -formvars_list [list \
                                    q $text \
                                    source $source_lang \
@@ -131,6 +133,7 @@ ad_proc -public libretranslate::translate_file {
     -file:required
     -source_lang:required
     -target_lang:required
+    {-timeout 120}
 } {
     Translates text from one language to the other.
 
@@ -147,6 +150,7 @@ ad_proc -public libretranslate::translate_file {
 
     set r [::util::http::post \
                -url ${server_url}/translate_file \
+               -timeout $timeout \
                -files [list [list \
                                  file $file \
                                  fieldname file]] \
